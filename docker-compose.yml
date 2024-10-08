@@ -1,0 +1,25 @@
+version: "3"
+
+volumes:
+  mariadb-data:
+  node_modules:
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: "paprk-managment-dev-db"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/mysql/initial_data.sql:/docker-entrypoint-initdb.d/initial_data.sql
+    environment:
+      MARIADB_DATABASE: ${DB_NAME:-paprk-managment-data}
+      MARIADB_USER: ${DB_USER:-paprk-managment}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-paprk-managmentdefaultpassword}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      TZ: ${TZ:-'Asia/Tokyo'}
+    ports:
+      -  ${DB_PORT:-3306}:3306
+    tty: true
+
+  
